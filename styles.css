@@ -1,0 +1,138 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  position: absolute;
+  top: 10px;
+  left: 30px;
+  width: 13%;
+}
+
+h1 {
+  margin-bottom: 30px;
+  margin-left: 30px;
+}
+
+.scan-container {
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+  position: relative;
+}
+
+#scan-input {
+  width: 100%;
+  padding: 12px 40px 12px 12px;
+  font-size: 1.2em;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+#scan-input:hover {
+  border-color: #999;
+}
+
+#scan-input::placeholder {
+  color: #aaa;
+}
+
+.scan-container::before {
+  content: "💳";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2em;
+  pointer-events: none;
+}
+
+/* Meeting section */
+.greeting {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 60px;
+  font-size: 24px;
+}
+
+.teacher-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.teacher {
+  flex: 1 0 calc(30% - 10px);
+  margin: 5px;
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  font-size: 18px;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.teacher:hover {
+  background-color: #e6e6e6;
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.teacher:active {
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transform: scale(0.98);
+}
+
+/* Services Section */
+.services {
+  display: flex;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 50px;
+  font-size: 30px;
+}
+/* Thankyou Page */
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f3f4f6;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thankyou-container {
+  background-color: #ffffff;
+  padding: 40px 60px;
+  border-radius: 10px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+h1 {
+  color: #2d3142;
+  margin-bottom: 15px;
+  margin-right: 45px;
+}
+
+p {
+  color: #4e4e50;
+  font-size: 40px;
+}
