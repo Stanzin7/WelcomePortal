@@ -1,0 +1,17 @@
+{
+  "CardNum": 1231476,
+  "name": "Stanzin",
+  "image": "img/person-1.jpg",
+  "office": "Academic Resource Center",
+  "workers": {
+    "Henrique": {
+      "services": ["Tutoring", "Writing Assistance", "Study Groups"],
+      "image": "img/person-1.jpg"
+    },
+    "John": {
+      "services": ["Research"],
+      "image": "img/person-2.jpg"
+    }
+  },
+  "NoWorkers": null
+}
