@@ -1,132 +1,168 @@
 document
   .getElementById("cardForm")
   .addEventListener("submit", async function (event) {
-    event.preventDefault(); // Prevent the form from actually submitting and refreshing the page
+    event.preventDefault();
 
-    let cardNumber = document.getElementById("cardInput").value;
-    let office = "ARC";
+    const cardNumber = document.getElementById("cardInput").value;
 
     try {
-      let response = await fetch("data.json");
+      const response = await fetch("data.json");
+
       if (response.ok) {
-        let raw = await response.text();
+        const datasets = await response.json();
 
-        let datasets;
-        try {
-          datasets = JSON.parse(raw);
-        } catch (error) {
-          console.error("Error parsing JSON:", error);
-          return;
-        }
-
-        if (datasets && datasets.CardNum == cardNumber) {
+        if (datasets && datasets.CardNum === cardNumber) {
           displayUserServices(datasets);
         } else {
           alert("Card not found.");
         }
       } else {
-        console.error("Failed to fetch data. HTTP Status:", response.status);
+        console.error(`Failed to fetch data. HTTP Status: ${response.status}`);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   });
 
-function displayUserServices(data) {
+function transitionToNext() {
   document.querySelector(".card-swipe").style.display = "none";
-  document.getElementById("userName").innerText = data.name;
-  let workerContainer = document.getElementById("workers");
-  let noWorkersContainer = document.getElementById("noWorkers");
-
-  // Clear previous buttons
-  workerContainer.innerHTML = "";
-  noWorkersContainer.style.display = "none";
-
-  if (data.workers) {
-    for (let worker in data.workers) {
-      let workerBtn = document.createElement("button");
-      workerBtn.innerHTML = worker;
-      workerBtn.addEventListener("click", function () {
-        handleServiceSelection(worker, data.workers[worker].services);
-      });
-
-      if (data.workers[worker].image) {
-        let workerImg = document.createElement("img");
-        workerImg.src = data.workers[worker].image;
-        workerImg.alt = worker + "'s image";
-        workerImg.width = 50;
-        workerImg.height = 50;
-        workerContainer.appendChild(workerImg);
-      }
-
-      workerContainer.appendChild(workerBtn);
-    }
-  } else if (data.NoWorkers) {
-    noWorkersContainer.style.display = "block";
-    let servicesContainer = document.getElementById("availableServices");
-    servicesContainer.innerHTML = "";
-
-    data.NoWorkers.forEach((service) => {
-      let serviceBtn = document.createElement("button");
-      serviceBtn.classList.add("service-btn");
-      serviceBtn.innerHTML = service;
-      serviceBtn.addEventListener("click", function () {
-        alert("Selected Service: " + service);
-        // Handle service selection here
-      });
-      servicesContainer.appendChild(serviceBtn);
-    });
-  }
-
   document.getElementById("cardScanContainer").style.display = "none";
+  document.getElementById("greetingContainer").style.display = "block";
+}
+document.getElementById("noBtn").addEventListener("click", function () {
+  document.querySelector(".card-swipe").style.display = "none";
+  document.getElementById("greetingContainer").style.display = "none";
+  document.getElementById("noResponseContainer").style.display = "block";
+});
+document.getElementById("yesBtn").addEventListener("click", function () {
+  console.log("Yes button clicked!");
+
+  document.querySelector(".card-swipe").style.display = "none";
+  document.getElementById("greetingContainer").style.display = "none";
+  document.getElementById("serviceContainer").style.display = "block";
+
+  // Populate the workers list
+  const workers = [
+    "Nicole Willis",
+    "Molly Mundt",
+    "Jan Simpson",
+    "Jessica Herrmeyer",
+    "ARC Peer",
+    "Testing",
+  ];
+
+  const workerContainer = document.getElementById("workers");
+
+  workers.forEach((worker) => {
+    const workerBtn = document.createElement("button");
+    workerBtn.classList.add("worker-btn");
+    workerBtn.textContent = worker;
+    workerBtn.addEventListener("click", () => {
+      alert(`You've scheduled a meeting with: ${worker}`);
+    });
+
+    workerContainer.appendChild(workerBtn);
+  });
+});
+
+function displayUserServices(data) {
+  document.querySelector(".title-class-name").classList.add("hide-title");
+
+  document.querySelector(".card-swipe").style.display = "none";
+
+  const userName = document.getElementById("userName");
+  userName.appendChild(createUserInfoBox(data));
+
+  const workerContainer = document.getElementById("workers");
+  workerContainer.appendChild(createServiceList(data));
+
+  transitionToNext();
+
   document.getElementById("serviceContainer").style.display = "block";
 }
 
+function createUserInfoBox(data) {
+  const userInfoBox = document.createElement("div");
+  userInfoBox.classList.add("user-info-box");
+
+  const userNameElem = document.createElement("h1");
+  userNameElem.textContent = `Hello, ${data.name}`;
+  userInfoBox.appendChild(userNameElem);
+
+  if (data.image) {
+    const userImage = document.createElement("img");
+    userImage.src = data.image;
+    userImage.alt = `${data.name}'s image`;
+    userInfoBox.appendChild(userImage);
+  }
+
+  const userDescription = document.createElement("p");
+  userDescription.textContent = data.description;
+  userInfoBox.appendChild(userDescription);
+
+  return userInfoBox;
+}
+
+function createServiceList(data) {
+  const serviceList = document.createElement("div");
+
+  if (data.workers) {
+    for (let worker in data.workers) {
+      const workerBtn = document.createElement("button");
+      workerBtn.classList.add("worker-btn");
+      workerBtn.textContent = worker;
+      workerBtn.addEventListener("click", () => {
+        handleServiceSelection(worker, data.workers[worker].services);
+      });
+
+      serviceList.appendChild(workerBtn);
+    }
+  } else if (data.NoWorkers) {
+    data.NoWorkers.forEach((service) => {
+      const serviceBtn = document.createElement("button");
+      serviceBtn.classList.add("service-btn");
+      serviceBtn.textContent = service;
+      serviceBtn.addEventListener("click", () => {
+        alert("Selected Service: " + service);
+      });
+
+      serviceList.appendChild(serviceBtn);
+    });
+  }
+
+  return serviceList;
+}
+
 function handleServiceSelection(worker, services) {
-  // Notify user of their worker selection
   alert(
     `You've selected ${worker}. They provide the following services: ${services.join(
       ", "
     )}`
   );
 
-  // Create a popup or modal (simple div for this example) to display services
-  let serviceModal = document.createElement("div");
+  const serviceModal = document.createElement("div");
   serviceModal.id = "serviceModal";
-  serviceModal.style.position = "fixed";
-  serviceModal.style.top = "0";
-  serviceModal.style.left = "0";
-  serviceModal.style.width = "100%";
-  serviceModal.style.height = "100%";
-  serviceModal.style.backgroundColor = "rgba(0,0,0,0.7)";
-  serviceModal.style.display = "flex";
-  serviceModal.style.justifyContent = "center";
-  serviceModal.style.alignItems = "center";
-  serviceModal.style.zIndex = "1000";
+  serviceModal.classList.add("service-modal");
 
-  let serviceList = document.createElement("div");
-  serviceList.style.backgroundColor = "#fff";
-  serviceList.style.padding = "20px";
-  serviceList.style.borderRadius = "8px";
+  const serviceList = document.createElement("div");
+  serviceList.classList.add("service-list");
 
   services.forEach((service) => {
-    let serviceBtn = document.createElement("button");
+    const serviceBtn = document.createElement("button");
     serviceBtn.classList.add("service-btn");
-    serviceBtn.innerHTML = service;
-    serviceBtn.style.margin = "5px";
-    serviceBtn.addEventListener("click", function () {
+    serviceBtn.textContent = service;
+    serviceBtn.addEventListener("click", () => {
       alert(`You've selected the service: ${service}`);
-      // Send this information to the server or process further
-      // For now, we just close the modal
       document.body.removeChild(serviceModal);
     });
+
     serviceList.appendChild(serviceBtn);
   });
 
-  let closeBtn = document.createElement("button");
-  closeBtn.innerHTML = "Close";
-  closeBtn.style.marginTop = "10px";
-  closeBtn.addEventListener("click", function () {
+  const closeBtn = document.createElement("button");
+  closeBtn.classList.add("close-btn");
+  closeBtn.textContent = "Close";
+  closeBtn.addEventListener("click", () => {
     document.body.removeChild(serviceModal);
   });
 

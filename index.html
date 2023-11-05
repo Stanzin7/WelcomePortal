@@ -6,27 +6,35 @@
     <link rel="stylesheet" href="style.css" />
     <title>Service Selection</title>
   </head>
-
   <body>
-    <img src="/img/wartburg.png" alt="wartburg-logo" id="logo" />
     <header class="card-swipe">
-      <h1 class>Swipe Your Card</h1>
+      <h1 class="set-title-all">Swipe Your Card</h1>
     </header>
     <div class="container" id="cardScanContainer">
-      <form id="cardForm">
+      <form
+        id="cardForm"
+        onsubmit="event.preventDefault(); transitionToNext();"
+      >
         <input type="text" id="cardInput" placeholder="Scan your card..." />
-        <button type="submit">Submit</button>
+        <button class="set-btn-all" type="submit">Submit</button>
       </form>
+    </div>
+    <div class="container" id="greetingContainer" style="display: none">
+      <h2>Hi, <span id="studentName">Jacob</span></h2>
+      <p>Do you have an appointment with one of our staff members today?</p>
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
+    </div>
+    <div class="container" id="noResponseContainer" style="display: none">
+      <h2>We're so glad you stopped into the ARC!</h2>
+      <p>Please check in with the front desk staff to see if someone is available at this time or arrange a meeting.</p>
     </div>
 
     <div class="container" id="serviceContainer" style="display: none">
-      <h1>Hello, <span id="userName"></span></h1>
-      <p>What services are you looking for?</p>
+      <h1>Hello Jacob, <span id="userName"></span></h1>
+      <p>Great, please let us know with whom you are scheduled to meet.</p>
       <div id="workers"></div>
-      <div id="noWorkers" style="display: none">
-        <p>Available Services:</p>
-        <div id="availableServices"></div>
-      </div>
+    </div>
     </div>
 
     <script src="script.js"></script>
